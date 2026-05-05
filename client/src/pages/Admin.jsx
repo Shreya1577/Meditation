@@ -15,7 +15,7 @@ const Admin = () => {
 
     const fetchStudents = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/admin/students', {
+            const res = await axios.get('https://meditation-s0cf.onrender.com/api/admin/students', {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setStudents(res.data);
@@ -26,7 +26,7 @@ const Admin = () => {
 
     const fetchCurrentLink = async () => {
         try {
-            const res = await axios.get('http://localhost:5000/api/admin/live-link');
+            const res = await axios.get('https://meditation-s0cf.onrender.com/api/admin/live-link');
             setLink(res.data.currentLink);
         } catch (err) {
             console.error("Error fetching link", err);
@@ -35,7 +35,7 @@ const Admin = () => {
 
     const handleUpdateLink = async () => {
         try {
-            await axios.post('http://localhost:5000/api/admin/update-link', { link }, {
+            await axios.post('https://meditation-s0cf.onrender.com/api/admin/update-link', { link }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             alert("Link updated for all students!");
@@ -51,7 +51,7 @@ const Admin = () => {
     const approveSubscription = async () => {
         const { userId, type } = confirmModal;
         try {
-            await axios.post('http://localhost:5000/api/admin/approve-subscription', 
+            await axios.post('https://meditation-s0cf.onrender.com/api/admin/approve-subscription', 
                 { userId, type, durationDays: type === 'monthly' ? 30 : 365 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );

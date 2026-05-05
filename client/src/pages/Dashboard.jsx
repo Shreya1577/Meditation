@@ -21,7 +21,7 @@ const Dashboard = () => {
         
         const fetchLiveLink = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/admin/live-link');
+                const res = await axios.get('https://meditation-s0cf.onrender.com/api/admin/live-link');
                 setLiveSession(res.data);
             } catch (err) {
                 console.error("Error fetching live link", err);
