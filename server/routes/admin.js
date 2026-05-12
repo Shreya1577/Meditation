@@ -28,11 +28,12 @@ router.get('/students', isAdmin, async (req, res) => {
 // Update student subscription (Manual approval)
 router.post('/approve-subscription', isAdmin, async (req, res) => {
     try {
-        const { userId, type, durationDays } = req.body;
+        const { userId, type, durationDays, courseName } = req.body;
         const endDate = new Date();
         endDate.setDate(endDate.getDate() + durationDays);
 
         await User.findByIdAndUpdate(userId, {
+            courseName: courseName || "None",
             subscription: {
                 type,
                 startDate: new Date(),

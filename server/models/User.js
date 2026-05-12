@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
         isActive: { type: Boolean, default: false }
     },
     dailyProgress: { type: Number, default: 0 },
+    courseName: { type: String, default: "None" },
     createdAt: { type: Date, default: Date.now }
 });
 

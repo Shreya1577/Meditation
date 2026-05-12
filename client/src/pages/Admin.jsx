@@ -5,7 +5,7 @@ import { Users, Link as LinkIcon, CheckCircle, Trash2 } from 'lucide-react';
 const Admin = () => {
     const [students, setStudents] = useState([]);
     const [link, setLink] = useState("");
-    const [confirmModal, setConfirmModal] = useState({ show: false, userId: null, userName: '', type: '' });
+    const [confirmModal, setConfirmModal] = useState({ show: false, userId: null, userName: '', type: '', courseName: 'Job Manifestation' });
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -45,21 +45,35 @@ const Admin = () => {
     };
 
     const requestApproval = (userId, userName, type) => {
-        setConfirmModal({ show: true, userId, userName, type });
+        setConfirmModal({ show: true, userId, userName, type, courseName: 'Job Manifestation' });
     };
 
     const approveSubscription = async () => {
-        const { userId, type } = confirmModal;
+        const { userId, type, courseName } = confirmModal;
         try {
             await axios.post('https://meditation-s0cf.onrender.com/api/admin/approve-subscription', 
-                { userId, type, durationDays: type === 'monthly' ? 30 : 365 },
+                { userId, type, durationDays: 30, courseName },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             fetchStudents();
-            setConfirmModal({ show: false, userId: null, userName: '', type: '' });
+            setConfirmModal({ show: false, userId: null, userName: '', type: '', courseName: 'Job Manifestation' });
             alert("Subscription approved successfully!");
         } catch (err) {
             alert("Failed to approve");
+        }
+    };
+
+    const handleRevokeAccess = async (id, name) => {
+        if (window.confirm(`Are you sure you want to remove access for ${name}?`)) {
+            try {
+                await axios.delete(`https://meditation-s0cf.onrender.com/api/admin/revoke-access/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                fetchStudents();
+                alert('Access removed successfully.');
+            } catch (err) {
+                alert('Failed to remove access');
+            }
         }
     };
 
@@ -73,11 +87,19 @@ const Admin = () => {
                             <CheckCircle color="var(--primary-purple)" size={32} />
                         </div>
                         <h2 style={{ fontFamily: "'Playfair Display', serif", marginBottom: '1rem' }}>Confirm Access</h2>
-                        <p style={{ color: 'var(--text-dim)', lineHeight: 1.6, marginBottom: '2.5rem' }}>
+                        <p style={{ color: 'var(--text-dim)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
                             Are you sure you want to grant <strong style={{ color: 'var(--text-main)' }}>{confirmModal.type.toUpperCase()}</strong> access to <strong style={{ color: 'var(--text-main)' }}>{confirmModal.userName}</strong>?
                         </p>
+                        <select 
+                            value={confirmModal.courseName} 
+                            onChange={(e) => setConfirmModal({...confirmModal, courseName: e.target.value})}
+                            style={{ width: '100%', padding: '10px', marginBottom: '2rem', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'white' }}
+                        >
+                            <option value="Job Manifestation">Job Manifestation</option>
+                            <option value="Money Magnet">Money Magnet</option>
+                        </select>
                         <div style={{ display: 'flex', gap: '1rem' }}>
-                            <button onClick={() => setConfirmModal({ show: false, userId: null, userName: '', type: '' })} className="btn-primary" style={{ flex: 1, background: '#f1f5f9', color: 'var(--text-main)', boxShadow: 'none' }}>Cancel</button>
+                            <button onClick={() => setConfirmModal({ show: false, userId: null, userName: '', type: '', courseName: 'Job Manifestation' })} className="btn-primary" style={{ flex: 1, background: '#f1f5f9', color: 'var(--text-main)', boxShadow: 'none' }}>Cancel</button>
                             <button onClick={approveSubscription} className="btn-primary" style={{ flex: 1 }}>Confirm</button>
                         </div>
                     </div>
@@ -120,6 +142,7 @@ const Admin = () => {
                                     <th style={{ padding: '0 1.5rem', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-dim)' }}>Name</th>
                                     <th style={{ padding: '0 1.5rem', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-dim)' }}>Email</th>
                                     <th style={{ padding: '0 1.5rem', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-dim)' }}>Plan</th>
+                                    <th style={{ padding: '0 1.5rem', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-dim)' }}>Course</th>
                                     <th style={{ padding: '0 1.5rem', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-dim)', textAlign: 'right' }}>Actions</th>
                                 </tr>
                             </thead>
@@ -140,11 +163,17 @@ const Admin = () => {
                                                 {student.subscription?.type?.toUpperCase() || 'NONE'}
                                             </span>
                                         </td>
+                                        <td style={{ padding: '1.2rem 1.5rem', fontWeight: 600, color: 'var(--text-dim)' }}>
+                                            {student.courseName || 'None'}
+                                        </td>
                                         <td style={{ padding: '1.2rem 1.5rem', textAlign: 'right', borderRadius: '0 16px 16px 0' }}>
-                                            {!student.subscription?.isActive && (
+                                            {!student.subscription?.isActive ? (
                                                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                                                     <button onClick={() => requestApproval(student._id, student.name, 'monthly')} className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.7rem', background: 'var(--primary-blue)' }}>+ Monthly</button>
-                                                    <button onClick={() => requestApproval(student._id, student.name, 'yearly')} className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.7rem' }}>+ Yearly</button>
+                                                </div>
+                                            ) : (
+                                                <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                                                    <button onClick={() => handleRevokeAccess(student._id, student.name)} className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.7rem', background: '#ef4444' }}>Remove Access</button>
                                                 </div>
                                             )}
                                         </td>
