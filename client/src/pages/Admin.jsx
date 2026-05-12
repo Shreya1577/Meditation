@@ -66,13 +66,13 @@ const Admin = () => {
     const handleRevokeAccess = async (id, name) => {
         if (window.confirm(`Are you sure you want to remove access for ${name}?`)) {
             try {
-                await axios.delete(`https://meditation-s0cf.onrender.com/api/admin/revoke-access/${id}`, {
+                await axios.post(`https://meditation-s0cf.onrender.com/api/admin/revoke-access/${id}`, {}, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 fetchStudents();
                 alert('Access removed successfully.');
             } catch (err) {
-                alert('Failed to remove access');
+                alert('Failed to remove access: ' + (err.response?.data?.error || err.message));
             }
         }
     };

@@ -33,15 +33,35 @@ router.post('/approve-subscription', isAdmin, async (req, res) => {
         endDate.setDate(endDate.getDate() + durationDays);
 
         await User.findByIdAndUpdate(userId, {
-            courseName: courseName || "None",
-            subscription: {
-                type,
-                startDate: new Date(),
-                endDate,
-                isActive: true
+            $set: {
+                courseName: courseName || "None",
+                subscription: {
+                    type,
+                    startDate: new Date(),
+                    endDate,
+                    isActive: true
+                }
             }
         });
         res.json({ message: 'Subscription approved successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Revoke access
+router.post('/revoke-access/:id', isAdmin, async (req, res) => {
+    try {
+        await User.findByIdAndUpdate(req.params.id, {
+            $set: {
+                courseName: "None",
+                "subscription.type": "none",
+                "subscription.isActive": false,
+                "subscription.startDate": null,
+                "subscription.endDate": null
+            }
+        });
+        res.json({ message: 'Access revoked successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
