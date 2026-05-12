@@ -24,13 +24,13 @@ const Auth = () => {
         width: '100%',
         padding: '14px 14px 14px 44px',
         borderRadius: '16px',
-        background: 'white',
-        border: '1px solid #e2e8f0',
+        background: 'var(--bg-main)',
+        border: '1px solid var(--glass-border)',
         color: 'var(--text-main)',
         fontSize: '1rem',
         outline: 'none',
         transition: 'all 0.3s ease',
-        boxShadow: 'var(--shadow-soft)'
+        boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
     };
 
     const iconStyle = {
@@ -42,8 +42,8 @@ const Auth = () => {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: 'var(--bg-gradient)' }}>
-            <div className="glass-card" style={{ width: '100%', maxWidth: '480px', background: 'rgba(255,255,255,0.9)', padding: '3rem' }}>
+        <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+            <div className="glass-card" style={{ width: '100%', maxWidth: '480px', padding: '3rem' }}>
                 <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
                     <div style={{ width: '60px', height: '60px', borderRadius: '20px', background: 'var(--gradient-pill)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', color: 'white' }}>
                         <Sparkles size={30} />
@@ -114,6 +114,7 @@ const Auth = () => {
             </div>
         </div>
     );
+
 };
 
 export default Auth;

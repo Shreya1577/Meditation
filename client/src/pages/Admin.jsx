@@ -81,8 +81,8 @@ const Admin = () => {
         <div style={{ paddingTop: '140px', paddingBottom: '100px', minHeight: '100vh' }} className="container">
             {/* Confirmation Modal */}
             {confirmModal.show && (
-                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(8px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <div className="glass-card" style={{ maxWidth: '450px', width: '90%', textAlign: 'center', background: 'white', padding: '3rem' }}>
+                <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div className="glass-card" style={{ maxWidth: '450px', width: '90%', textAlign: 'center', padding: '3rem' }}>
                         <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(124, 58, 237, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
                             <CheckCircle color="var(--primary-purple)" size={32} />
                         </div>
@@ -93,13 +93,13 @@ const Admin = () => {
                         <select 
                             value={confirmModal.courseName} 
                             onChange={(e) => setConfirmModal({...confirmModal, courseName: e.target.value})}
-                            style={{ width: '100%', padding: '10px', marginBottom: '2rem', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'white' }}
+                            style={{ width: '100%', padding: '10px', marginBottom: '2rem', borderRadius: '8px', border: '1px solid var(--glass-border)', background: 'var(--bg-main)', color: 'var(--text-main)' }}
                         >
                             <option value="Job Manifestation">Job Manifestation</option>
                             <option value="Money Magnet">Money Magnet</option>
                         </select>
                         <div style={{ display: 'flex', gap: '1rem' }}>
-                            <button onClick={() => setConfirmModal({ show: false, userId: null, userName: '', type: '', courseName: 'Job Manifestation' })} className="btn-primary" style={{ flex: 1, background: '#f1f5f9', color: 'var(--text-main)', boxShadow: 'none' }}>Cancel</button>
+                            <button onClick={() => setConfirmModal({ show: false, userId: null, userName: '', type: '', courseName: 'Job Manifestation' })} className="btn-primary" style={{ flex: 1, background: 'var(--glass-border)', color: 'var(--text-main)', boxShadow: 'none' }}>Cancel</button>
                             <button onClick={approveSubscription} className="btn-primary" style={{ flex: 1 }}>Confirm</button>
                         </div>
                     </div>
@@ -111,7 +111,7 @@ const Admin = () => {
                 <p style={{ color: 'var(--text-dim)', fontSize: '1.1rem' }}>Manage your community and live session energy.</p>
             </header>
 
-            <div style={{ display: 'grid', gridTemplate_columns: '1fr 2.5fr', gap: '3rem' }}>
+            <div className="admin-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
                 {/* Link Controller */}
                 <div className="glass-card" style={{ height: 'fit-content', padding: '2.5rem' }}>
                     <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '2rem', fontFamily: "'Playfair Display', serif", fontSize: '1.5rem' }}>
@@ -124,7 +124,7 @@ const Admin = () => {
                             value={link}
                             onChange={(e) => setLink(e.target.value)}
                             placeholder="https://zoom.us/j/..."
-                            style={{ width: '100%', padding: '15px', borderRadius: '16px', background: 'white', border: '1px solid var(--glass-border)', color: 'var(--text-main)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)' }}
+                            style={{ width: '100%', padding: '15px', borderRadius: '16px', background: 'var(--bg-main)', border: '1px solid var(--glass-border)', color: 'var(--text-main)', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)' }}
                         />
                     </div>
                     <button onClick={handleUpdateLink} className="btn-primary" style={{ width: '100%', borderRadius: '16px' }}>Update Live Link</button>
@@ -135,7 +135,7 @@ const Admin = () => {
                     <h3 style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '2.5rem', fontFamily: "'Playfair Display', serif", fontSize: '1.5rem' }}>
                         <Users size={20} color="var(--primary-blue)" /> Manage Community
                     </h3>
-                    <div style={{ overflowX: 'auto' }}>
+                    <div className="admin-table-wrapper" style={{ overflowX: 'auto' }}>
                         <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0 15px' }}>
                             <thead>
                                 <tr style={{ textAlign: 'left' }}>
@@ -148,7 +148,7 @@ const Admin = () => {
                             </thead>
                             <tbody>
                                 {students.map(student => (
-                                    <tr key={student._id} style={{ background: 'white', borderRadius: '16px', boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
+                                    <tr key={student._id} style={{ background: 'var(--card-bg)', borderRadius: '16px', boxShadow: 'var(--shadow-soft)' }}>
                                         <td style={{ padding: '1.2rem 1.5rem', fontWeight: 600, borderRadius: '16px 0 0 16px' }}>{student.name}</td>
                                         <td style={{ padding: '1.2rem 1.5rem', color: 'var(--text-dim)', fontSize: '0.9rem' }}>{student.email}</td>
                                         <td style={{ padding: '1.2rem 1.5rem' }}>
@@ -184,6 +184,7 @@ const Admin = () => {
                     </div>
                 </div>
             </div>
+
         </div>
     );
 };

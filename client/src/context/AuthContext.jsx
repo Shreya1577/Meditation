@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [darkMode, setDarkMode] = useState(localStorage.getItem('theme') === 'dark');
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -23,6 +24,18 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     }, []);
+
+    useEffect(() => {
+        if (darkMode) {
+            document.body.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.body.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [darkMode]);
+
+    const toggleDarkMode = () => setDarkMode(!darkMode);
 
     const login = async (email, password) => {
         const res = await axios.post('https://meditation-s0cf.onrender.com/api/auth/login', { email, password });
@@ -42,8 +55,9 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, register, logout, loading, darkMode, toggleDarkMode }}>
             {children}
         </AuthContext.Provider>
     );
 };
+
