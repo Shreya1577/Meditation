@@ -30,12 +30,12 @@ const Dashboard = () => {
         fetchLiveLink();
     }, []);
 
-    const daysLeft = user?.subscription?.isActive 
-        ? Math.max(0, Math.ceil((new Date(user.subscription.endDate) - new Date()) / (1000 * 60 * 60 * 24)))
+    const daysActive = user?.subscription?.isActive && user?.subscription?.startDate
+        ? Math.max(1, Math.floor((new Date() - new Date(user.subscription.startDate)) / (1000 * 60 * 60 * 24)) + 1)
         : 0;
 
     return (
-        <div style={{ paddingTop: '160px', paddingBottom: '100px' }} className="container">
+        <div style={{ paddingTop: '140px', paddingBottom: '100px' }} className="container">
             <header style={{ textAlign: 'center', marginBottom: '5rem' }}>
                 <div className="badge" style={{ background: 'rgba(59, 130, 246, 0.1)', color: 'var(--primary-blue)', marginBottom: '1.5rem' }}>
                     Welcome back
@@ -46,7 +46,7 @@ const Dashboard = () => {
                 <p style={{ color: 'var(--text-dim)', fontSize: '1.2rem', marginTop: '1rem' }}>"{affirmation}"</p>
             </header>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '3rem' }}>
+            <div className="dashboard-grid">
                 {/* Main Content Area */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
                     {/* Live Class Section */}
@@ -90,8 +90,8 @@ const Dashboard = () => {
                             </div>
                         )}
 
-                        <div style={{ marginTop: '2.5rem', display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
-                            <div style={{ background: 'white', padding: '1.5rem', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '15px', boxShadow: 'var(--shadow-soft)' }}>
+                        <div style={{ marginTop: '2.5rem' }}>
+                            <div style={{ background: 'white', padding: '1.2rem 1.5rem', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '15px', boxShadow: 'var(--shadow-soft)' }}>
                                 <Clock color="var(--primary-purple)" />
                                 <div>
                                     <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Evening Session</div>
@@ -104,7 +104,7 @@ const Dashboard = () => {
                     {/* Recommendations */}
                     <div>
                         <h3 style={{ fontSize: '1.8rem', marginBottom: '2rem', fontWeight: 800 }}>Elevate Your Practice</h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                        <div className="reco-grid">
                             <div className="glass-card" style={{ background: 'white' }}>
                                 <Star color="#f59e0b" fill="#f59e0b" style={{ marginBottom: '1rem' }} />
                                 <h4>Deep Sleep Guided</h4>
@@ -124,10 +124,10 @@ const Dashboard = () => {
                     <div className="glass-card" style={{ background: 'var(--gradient-pill)', color: 'white' }}>
                         <Award size={32} style={{ marginBottom: '1.5rem' }} />
                         <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Zen Journey</h3>
-                        <div style={{ fontSize: '3.5rem', fontWeight: 800 }}>{daysLeft}</div>
-                        <p style={{ opacity: 0.8 }}>Days remaining</p>
+                        <div style={{ fontSize: '3.5rem', fontWeight: 800 }}>{daysActive}</div>
+                        <p style={{ opacity: 0.8 }}>{daysActive === 1 ? 'Day active' : 'Days active'}</p>
                         <div style={{ marginTop: '2rem', height: '6px', background: 'rgba(255,255,255,0.2)', borderRadius: '10px' }}>
-                            <div style={{ width: `${Math.min(100, (daysLeft / 30) * 100)}%`, height: '100%', background: 'white', borderRadius: '10px' }}></div>
+                            <div style={{ width: `${Math.min(100, (daysActive / 30) * 100)}%`, height: '100%', background: 'white', borderRadius: '10px', transition: 'width 0.8s ease' }}></div>
                         </div>
                     </div>
 
